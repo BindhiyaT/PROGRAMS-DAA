@@ -1,4 +1,4 @@
-1.Linear search in C
+1.LINEAR SEARCH in C
 
 #include <stdio.h>
 int search(int arr[], int N, int x)
@@ -44,7 +44,7 @@ Best Case: O (1)
 Average Case: O (n)
 Worst Case: O (n)
 
-2.Insertion Sort in C:
+2.INSERTION SORT in C:
 
 #include <math.h>
 #include <stdio.h>
