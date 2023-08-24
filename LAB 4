@@ -258,7 +258,7 @@ int main(void)
     int *graph = (int *)malloc((long unsigned) n * sizeof(int *));
     for (i = 0; i < n; i++)
     {
-        graph[i] = (int *)malloc((long unsigned) n * sizeof(int));
+        graph[i] = (int *)malloc((long unsigned) n * sizeof(int *));
     }
     for (i = 0; i < n; i++)
     {
