@@ -1,0 +1,302 @@
+1)COMPARISON SORTING
+#include<stdio.h>
+void countingsort(int a[], int n) {
+   int i, j;
+   int output[15], c[100];   
+   for (i = 0; i < 100; i++)
+      c[i] = 0;
+
+   for (j = 0; j < n; j++)
+      ++c[a[j]];
+
+   for (i = 1; i <= 99; i++)
+      c[i] += c[i-1];
+
+   for (j = n-1; j >= 0; j--) {
+      output[c[a[j]] - 1] = a[j];
+      --c[a[j]];
+   }
+   printf("The Sorted array is: ");
+   for (i = 0; i < n; i++)
+      printf("%d ", output[i]);
+}
+int main(){
+   int n = 5, i;
+   int a[15] = {12, 32, 44, 8, 16};
+   countingsort(a, n);
+   return 0;
+}
+
+
+2)BREADTH FIRST SEARCH
+#include <stdio.h>
+#include <stdbool.h>
+#define MAX_VERTICES 100
+int queue[MAX_VERTICES];
+int front = -1, rear = -1;
+void enqueue(int vertex) {
+    if (rear == MAX_VERTICES - 1) {
+        printf("Queue is full\n");
+    } else {
+        if (front == -1) {
+            front = 0;
+        }
+        rear++;
+        queue[rear] = vertex;
+    }
+}
+int dequeue() {
+    int vertex;
+    if (front == -1) {
+        printf("Queue is empty\n");
+        return -1;
+    } else {
+        vertex = queue[front];
+        front++;
+        if (front > rear) {
+            front = rear = -1;
+        }
+        return vertex;
+    }
+}
+bool isEmptyQueue() {
+    return front == -1;
+}
+void BFS(int graph[MAX_VERTICES][MAX_VERTICES], int vertices, int startVertex) {
+    bool visited[MAX_VERTICES] = {false};
+    enqueue(startVertex);
+    visited[startVertex] = true;
+    printf("Breadth-First Traversal starting from vertex %d: ", startVertex);
+    while (!isEmptyQueue()) {
+        int currentVertex = dequeue();
+        printf("%d ", currentVertex);
+
+        for (int i = 0; i < vertices; i++) {
+            if (graph[currentVertex][i] == 1 && !visited[i]) {
+                enqueue(i);
+                visited[i] = true;
+            }
+        }
+    }
+    printf("\n");
+}
+int main() {
+    int vertices;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &vertices);
+
+    int graph[MAX_VERTICES][MAX_VERTICES];
+    printf("Enter the adjacency matrix:\n");
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+    int startVertex;
+    printf("Enter the starting vertex: ");
+    scanf("%d", &startVertex);
+
+    BFS(graph, vertices, startVertex);
+
+    return 0;
+}
+Enter the number of vertices: 5
+Enter the adjacency matrix:
+0 1 0 1 0
+1 0 1 1 0
+0 1 0 0 1
+1 1 0 0 1
+0 0 1 1 0
+Enter the starting vertex: 0
+Breadth-First Traversal starting from vertex 0: 0 1 3 2 4
+
+
+3)DEPTH FIRST SEARCH
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_VERTICES 100
+typedef struct {
+    int vertices[MAX_VERTICES];
+    int top;
+} Stack;
+void push(Stack *stack, int vertex) {
+    stack->vertices[++stack->top] = vertex;
+}
+int pop(Stack *stack) {
+    return stack->vertices[stack->top--];
+}
+int isEmpty(Stack *stack) {
+    return stack->top == -1;
+}
+void DFS(int adjacencyMatrix[][MAX_VERTICES], int numVertices, int startVertex) {
+    int visited[MAX_VERTICES] = {0};
+    Stack stack;
+    stack.top = -1;
+    push(&stack, startVertex);
+    visited[startVertex] = 1;
+
+    printf("DFS traversal starting from vertex %d: ", startVertex);
+
+    while (!isEmpty(&stack)) {
+        int currentVertex = pop(&stack);
+        printf("%d ", currentVertex);
+
+        for (int i = 0; i < numVertices; i++) {
+            if (adjacencyMatrix[currentVertex][i] == 1 && !visited[i]) {
+                push(&stack, i);
+                visited[i] = 1;
+            }
+        }
+    }
+    printf("\n");
+}
+int main() {
+    int numVertices, startVertex;
+    
+    printf("Enter the number of vertices: ");
+    scanf("%d", &numVertices);
+    
+    int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES];
+    printf("Enter the adjacency matrix (1 if edge exists, 0 otherwise):\n");
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++) {
+            scanf("%d", &adjacencyMatrix[i][j]);
+        }
+    }   
+    printf("Enter the start vertex: ");
+    scanf("%d", &startVertex);
+    DFS(adjacencyMatrix, numVertices, startVertex);
+    return 0;
+}
+
+Example Input:
+Enter the number of vertices: 4
+Enter the adjacency matrix:
+0 1 1 0
+1 0 0 1
+1 0 0 0
+0 1 0 0
+Enter the start vertex: 0
+
+Example Output:
+DFS traversal starting from vertex 0: 0 1 3 2 
+
+
+4)WARSHALLS PROGRAM(DYNAMIC PROGRAMMING):
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+int max(int, int);
+void warshal(int p[10][10], int n) {
+    int i, j, k;
+    for (k = 1; k <= n; k++)
+        for (i = 1; i <= n; i++)
+            for (j = 1; j <= n; j++)
+                p[i][j] = max(p[i][j], p[i][k] && p[k][j]);
+}
+int max(int a, int b) {
+    ;
+    if (a > b)
+        return (a);
+    else
+        return (b);
+}
+void main() {
+    int p[10][10] = { 0 }, n, e, u, v, i, j;
+    printf("\n Enter the number of vertices:");
+    scanf("%d", &n);
+    printf("\n Enter the number of edges:");
+    scanf("%d", &e);
+    for (i = 1; i <= e; i++) {
+        //printf("\n Enter the end vertices of edge %d:", i);
+        scanf("%d%d", &u, &v);
+        p[u][v] = 1;
+    }
+    printf("\n Matrix of input data: \n");
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= n; j++)
+            printf("%d\t", p[i][j]);
+        printf("\n");
+    }
+    warshal(p, n);
+    printf("\n Transitive closure: \n");
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= n; j++)
+            printf("%d\t", p[i][j]);
+        printf("\n");
+    }
+    getch();
+}
+
+
+5)FLOYDS PROGRAM:
+#include <stdio.h>
+#include <stdlib.h>
+ 
+void floydWarshall(int **graph, int n)
+{
+    int i, j, k;
+    for (k = 0; k < n; k++)
+    {
+        for (i = 0; i < n; i++)
+        {
+            for (j = 0; j < n; j++)
+            {
+                if (graph[i][j] > graph[i][k] + graph[k][j])
+                    graph[i][j] = graph[i][k] + graph[k][j];
+            }
+        }
+    }
+}
+int main(void)
+{
+    int n, i, j;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &n);
+    int *graph = (int *)malloc((long unsigned) n * sizeof(int *));
+    for (i = 0; i < n; i++)
+    {
+        graph[i] = (int *)malloc((long unsigned) n * sizeof(int));
+    }
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            if (i == j)
+                graph[i][j] = 0;
+            else
+                graph[i][j] = 100;
+        }
+    }
+    printf("Enter the edges: \n");
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            printf("[%d][%d]: ", i, j);
+            scanf("%d", &graph[i][j]);
+        }
+    }
+    printf("The original graph is:\n");
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            printf("%d ", graph[i][j]);
+        }
+        printf("\n");
+    }
+    floydWarshall(graph, n);
+    printf("The shortest path matrix is:\n");
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            printf("%d ", graph[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
