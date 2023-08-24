@@ -1,0 +1,54 @@
+QUESTION:
+Social  networks  consist  of  individuals  connected  through  various relationships.
+Analyzing the connectivity within a social network can provide   insights   into   communities,   influence   propagation,   and information  flow.
+One  way  to  analyze  the  connectivity  is  to  find  the connected  components  within  the  network.Given  a  social  network represented  as  an  adjacency  matrix,
+the  task  is  to  find  the  connected components   using   the   Depth-First   Search   (DFS)   algorithm.
+The program   should   implement   the   DFS   algorithm   to   traverse   the network, identify the connected components, and display them.
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#define MAX_SIZE 100
+void dfs(int node, int n, bool visited[], int adjacency_matrix[][MAX_SIZE]) {
+    visited[node] = true;
+    printf("%d ", node);
+
+    for (int i = 0; i < n; i++) {
+        if (adjacency_matrix[node][i] == 1 && !visited[i]) {
+            dfs(i, n, visited, adjacency_matrix);
+        }
+    }
+}
+
+void findConnectedComponents(int n, int adjacency_matrix[][MAX_SIZE]) {
+    bool visited[MAX_SIZE];
+    for (int i = 0; i < n; i++) {
+        visited[i] = false;
+    }
+
+    printf("Connected Components:\n");
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            dfs(i, n, visited, adjacency_matrix);
+            printf("\n");
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of nodes in the social network: ");
+    scanf("%d", &n);
+
+    int adjacency_matrix[MAX_SIZE][MAX_SIZE];
+    printf("Enter the adjacency matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &adjacency_matrix[i][j]);
+        }
+    }
+
+    findConnectedComponents(n, adjacency_matrix);
+
+    return 0;
+}
